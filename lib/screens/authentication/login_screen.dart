@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:note_app/constants/constant.dart';
 import 'package:note_app/screens/authentication/register_screen.dart';
 import 'package:note_app/services/auth_service.dart';
+import 'package:note_app/utils/general_alert_dialog.dart';
 import 'package:note_app/widgets/general_text_field.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -69,6 +70,7 @@ class LoginScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
+                    GeneralAlertDialog().customLoadingDialog(context);
                     if (emailController.text == '' ||
                         passwordController.text == '') {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -86,6 +88,7 @@ class LoginScreen extends StatelessWidget {
                         debugPrint(result.toString());
                       }
                     }
+                    Navigator.of(context).pop();
                   },
                   child: const Text(
                     'Login',

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:note_app/constants/constant.dart';
 import 'package:note_app/screens/authentication/login_screen.dart';
 import 'package:note_app/services/auth_service.dart';
+import 'package:note_app/utils/general_alert_dialog.dart';
 import 'package:note_app/widgets/general_text_field.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -96,6 +97,7 @@ class RegisterScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
+                    GeneralAlertDialog().customLoadingDialog(context);
                     
                     if (emailController.text == '' ||
                         passwordController.text == '') {
@@ -124,6 +126,7 @@ class RegisterScreen extends StatelessWidget {
                         debugPrint(result.toString());
                       }
                     }
+                    Navigator.of(context).pop();
                     
                   },
                   child: Text(
