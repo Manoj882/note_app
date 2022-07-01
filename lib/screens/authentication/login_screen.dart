@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/constants/constant.dart';
 import 'package:note_app/screens/authentication/register_screen.dart';
+import 'package:note_app/screens/home_screen.dart';
 import 'package:note_app/services/auth_service.dart';
 import 'package:note_app/utils/general_alert_dialog.dart';
 import 'package:note_app/widgets/general_text_field.dart';
@@ -85,7 +86,8 @@ class LoginScreen extends StatelessWidget {
                           emailController.text, passwordController.text);
                       if (result != null) {
                         debugPrint('Successfully logged in');
-                        debugPrint(result.toString());
+                        // debugPrint(result.toString());
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
                       }
                     }
                     Navigator.of(context).pop();

@@ -6,6 +6,8 @@ import 'package:note_app/services/auth_service.dart';
 import 'package:note_app/utils/general_alert_dialog.dart';
 import 'package:note_app/widgets/general_text_field.dart';
 
+import '../home_screen.dart';
+
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
 
@@ -98,7 +100,7 @@ class RegisterScreen extends StatelessWidget {
                   onPressed: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
                     GeneralAlertDialog().customLoadingDialog(context);
-                    
+
                     if (emailController.text == '' ||
                         passwordController.text == '') {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -111,7 +113,7 @@ class RegisterScreen extends StatelessWidget {
                     } else if (passwordController.text !=
                         confirmPasswordController.text) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Password doesn\'t match'),
                         ),
                       );
@@ -119,15 +121,19 @@ class RegisterScreen extends StatelessWidget {
                       final result = await AuthService().register(
                         context,
                         emailController.text,
-                        passwordController.text, 
+                        passwordController.text,
                       );
-                      if(result != null){
+                      if (result != null) {
                         debugPrint('Successfully registered');
-                        debugPrint(result.toString());
+                        // debugPrint(result.toString());
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => HomeScreen()),
+                            (route) => false);
                       }
                     }
                     Navigator.of(context).pop();
-                    
                   },
                   child: Text(
                     'Sign Up',
