@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/constants/constant.dart';
 import 'package:note_app/screens/authentication/login_screen.dart';
@@ -94,10 +95,12 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 child: ElevatedButton(
                   onPressed: () async {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    
                     if (emailController.text == '' ||
                         passwordController.text == '') {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text(
                             'All fields are required',
                           ),
@@ -112,8 +115,9 @@ class RegisterScreen extends StatelessWidget {
                       );
                     } else {
                       final result = await AuthService().register(
+                        context,
                         emailController.text,
-                        passwordController.text,
+                        passwordController.text, 
                       );
                       if(result != null){
                         debugPrint('Successfully registered');

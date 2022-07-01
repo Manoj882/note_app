@@ -68,19 +68,20 @@ class LoginScreen extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   onPressed: () async {
+                    FocusManager.instance.primaryFocus?.unfocus();
                     if (emailController.text == '' ||
                         passwordController.text == '') {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text(
                             'All fields are reuired!!!',
                           ),
                         ),
                       );
-                    } 
-                    else {
-                      final result = await AuthService().login(emailController.text, passwordController.text);
-                      if(result != null){
+                    } else {
+                      final result = await AuthService().login(context,
+                          emailController.text, passwordController.text);
+                      if (result != null) {
                         debugPrint('Successfully logged in');
                         debugPrint(result.toString());
                       }
