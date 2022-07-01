@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/constants/constant.dart';
-import 'package:note_app/screens/register_screen.dart';
+import 'package:note_app/screens/authentication/register_screen.dart';
+import 'package:note_app/services/auth_service.dart';
 import 'package:note_app/widgets/general_text_field.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -66,8 +67,26 @@ class LoginScreen extends StatelessWidget {
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text(
+                  onPressed: () async {
+                    if (emailController.text == '' ||
+                        passwordController.text == '') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'All fields are reuired!!!',
+                          ),
+                        ),
+                      );
+                    } 
+                    else {
+                      final result = await AuthService().login(emailController.text, passwordController.text);
+                      if(result != null){
+                        debugPrint('Successfully logged in');
+                        debugPrint(result.toString());
+                      }
+                    }
+                  },
+                  child: const Text(
                     'Login',
                   ),
                 ),
@@ -81,14 +100,14 @@ class LoginScreen extends StatelessWidget {
                   const Text('Don\'t have an account?'),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (_) => RegisterScreen(),
                         ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       'Register',
                     ),
                   ),

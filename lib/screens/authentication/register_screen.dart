@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/constants/constant.dart';
-import 'package:note_app/screens/login_screen.dart';
+import 'package:note_app/screens/authentication/login_screen.dart';
+import 'package:note_app/services/auth_service.dart';
 import 'package:note_app/widgets/general_text_field.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -13,6 +14,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Register'),
         centerTitle: true,
@@ -91,7 +93,35 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (emailController.text == '' ||
+                        passwordController.text == '') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'All fields are required',
+                          ),
+                        ),
+                      );
+                    } else if (passwordController.text !=
+                        confirmPasswordController.text) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Password doesn\'t match'),
+                        ),
+                      );
+                    } else {
+                      final result = await AuthService().register(
+                        emailController.text,
+                        passwordController.text,
+                      );
+                      if(result != null){
+                        debugPrint('Successfully registered');
+                        debugPrint(result.toString());
+                      }
+                    }
+                    
+                  },
                   child: Text(
                     'Sign Up',
                     style: Theme.of(context).textTheme.headline6!.copyWith(
