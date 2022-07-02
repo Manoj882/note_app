@@ -2,11 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/screens/authentication/login_screen.dart';
 import 'package:note_app/screens/authentication/register_screen.dart';
+
 import 'package:note_app/screens/home_screen.dart';
 import 'package:note_app/services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
@@ -25,12 +27,11 @@ class MyApp extends StatelessWidget {
       // home:  RegisterScreen(),
       home: StreamBuilder(
         stream: AuthService().firebaseAuth.authStateChanges(),
-        builder: (context, snapshot){
-          if(snapshot.hasData){
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
             return HomeScreen();
-          }
-          else{
-            return LoginScreen() ;
+          } else {
+            return LoginScreen();
           }
         },
       ),
