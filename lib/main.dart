@@ -22,8 +22,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Note App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        // primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
       ),
+      debugShowCheckedModeBanner: false,
       // home:  RegisterScreen(),
       home: StreamBuilder(
         stream: AuthService().firebaseAuth.authStateChanges(),

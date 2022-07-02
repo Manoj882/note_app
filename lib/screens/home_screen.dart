@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:note_app/constants/constant.dart';
+import 'package:note_app/screens/notes/add_note_screen.dart';
+import 'package:note_app/screens/notes/edit_note_screen.dart';
 import 'package:note_app/services/auth_service.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -30,75 +33,54 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+      body: Padding(
+        padding: basePadding,
+        child: ListView(
           children: [
-            ElevatedButton(
-              onPressed: () async {
-                final users = await firestore.collection('users');
-
-                //Here, add method create auto document id
-                // await users.add({
-                //   'name': 'manoj'
-                // });
-
-                //Here, doc is used to give own document id
-                await users.doc('google123').set({
-                  'name': 'Google',
-                });
-              },
-              child: const Text(
-                'Add data to Firestore',
+            Card(
+              elevation: 5,
+              color: Colors.teal,
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 5,
+                  horizontal: 10,
+                ),
+                title: const Text(
+                  'Learn Flutter',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: const Text(
+                  'You can learn dart and flutter from basic to complete job ready package in Udemy',
+                  maxLines: 2,
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const EditNoteScreen(),
+                    ),
+                  );
+                },
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final users = firestore.collection('users');
-                //for fetching all data
-                // final allResults = await users.get();
-                // allResults.docs.forEach((result) {
-                //   print(result.data());
-                // });
-
-                //for fetching particular data -> give document id in doc()
-                final result = await users.doc('google123').get();
-                print(result.data());
-
-                //  //For stream data
-                // users.doc('google123').snapshots().listen((result) {
-                //   print(result.data());
-                // },
-                // );
-              },
-              child: const Text('Read data from Firestore'),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await firestore.collection('users').doc('google123').update({
-                  'name': 'Google Flutter',
-                });
-              },
-              child: const Text('Update data in Firestore'),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              onPressed: () async{
-                await firestore.collection('users').doc('google123').delete();
-              },
-              child: const Text('Delete data from Firestore'),
-            ),
           ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const AddNoteScreen(),
+            ),
+          );
+        },
+        backgroundColor: Colors.orangeAccent,
+        child: const Icon(
+          Icons.add_outlined,
         ),
       ),
     );
