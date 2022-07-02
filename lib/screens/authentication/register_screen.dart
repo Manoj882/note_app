@@ -17,12 +17,13 @@ class RegisterScreen extends StatelessWidget {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Register'),
+        title: const Text('Register'),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.redAccent,
@@ -166,36 +167,8 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      thickness: 1,
-                      endIndent: 5,
-                    ),
-                  ),
-                  Text('OR'),
-                  Expanded(
-                    child: Divider(
-                      thickness: 1,
-                      indent: 5,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: SignInButton(
-                  Buttons.Google,
-                  text: 'Continue with Goolge',
-                  onPressed: () {},
-                ),
-              ),
+              
+              
             ],
           ),
         ),

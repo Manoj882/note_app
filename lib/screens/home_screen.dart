@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_app/services/auth_service.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,7 +16,9 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.pinkAccent,
         actions: [
           TextButton.icon(
-            onPressed: () {},
+            onPressed: () async{
+              await AuthService().signOut();
+            },
             icon: Icon(Icons.logout_outlined),
             label: Text('Logout'),
             style: TextButton.styleFrom(
