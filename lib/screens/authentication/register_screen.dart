@@ -6,6 +6,8 @@ import 'package:note_app/services/auth_service.dart';
 import 'package:note_app/utils/general_alert_dialog.dart';
 import 'package:note_app/widgets/general_text_field.dart';
 
+import 'package:flutter_signin_button/flutter_signin_button.dart';
+
 import '../home_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -128,8 +130,7 @@ class RegisterScreen extends StatelessWidget {
                         // debugPrint(result.toString());
                         Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(
-                                builder: (_) => HomeScreen()),
+                            MaterialPageRoute(builder: (_) => HomeScreen()),
                             (route) => false);
                       }
                     }
@@ -164,6 +165,36 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      thickness: 1,
+                      endIndent: 5,
+                    ),
+                  ),
+                  Text('OR'),
+                  Expanded(
+                    child: Divider(
+                      thickness: 1,
+                      indent: 5,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: SignInButton(
+                  Buttons.Google,
+                  text: 'Continue with Goolge',
+                  onPressed: () {},
+                ),
               ),
             ],
           ),

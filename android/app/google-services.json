@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "329368366315-i611cj13mgu3f4esse6ogoa5nqra0dki.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.manojbk.note_app",
+            "certificate_hash": "c684cb135464ec530e90df9b1940b1888de36be5"
+          }
+        },
+        {
           "client_id": "329368366315-5s9asl0evmid1sm3cppk5f2qqpj6hjvo.apps.googleusercontent.com",
           "client_type": 3
         }
