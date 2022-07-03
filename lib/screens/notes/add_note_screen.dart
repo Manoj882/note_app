@@ -1,10 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/constants/constant.dart';
 import 'package:note_app/screens/home_screen.dart';
 import 'package:note_app/screens/notes/edit_note_screen.dart';
+import 'package:note_app/services/firestore_service.dart';
+import 'package:note_app/utils/general_alert_dialog.dart';
 
 class AddNoteScreen extends StatelessWidget {
-  const AddNoteScreen({Key? key}) : super(key: key);
+  AddNoteScreen({required this.user, Key? key}) : super(key: key);
+  final User user;
+
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +36,11 @@ class AddNoteScreen extends StatelessWidget {
               const SizedBox(
                 height: 15,
               ),
-              const TextField(
-                decoration: InputDecoration(border: OutlineInputBorder()),
+              TextField(
+                controller: titleController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                ),
               ),
               const SizedBox(
                 height: 30,
@@ -45,10 +55,11 @@ class AddNoteScreen extends StatelessWidget {
               const SizedBox(
                 height: 15,
               ),
-              const TextField(
+              TextField(
+                controller: descriptionController,
                 minLines: 5,
                 maxLines: 10,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -59,13 +70,21 @@ class AddNoteScreen extends StatelessWidget {
                 height: 50,
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => HomeScreen(),
-                      ),
-                    );
+                  onPressed: () async {
+                    GeneralAlertDialog().customLoadingDialog(context);
+                    if (titleController.text == '' ||
+                        descriptionController.text == '') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'All fields are required',
+                          ),
+                        ),
+                      );
+                    } else{
+                      await FirestoreService().addNote(titleController.text, descriptionController.text, user.uid);
+                    }
+                    Navigator.pop(context);  
                   },
                   child: Text('Add Note'),
                   style: ElevatedButton.styleFrom(

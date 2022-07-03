@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/constants/constant.dart';
 import 'package:note_app/screens/notes/add_note_screen.dart';
@@ -6,9 +7,10 @@ import 'package:note_app/screens/notes/edit_note_screen.dart';
 import 'package:note_app/services/auth_service.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({required this.user, Key? key}) : super(key: key);
 
   final firestore = FirebaseFirestore.instance;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +76,7 @@ class HomeScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => const AddNoteScreen(),
+              builder: (_) =>  AddNoteScreen(user: user,),
             ),
           );
         },

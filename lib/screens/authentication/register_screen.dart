@@ -17,7 +17,6 @@ class RegisterScreen extends StatelessWidget {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,7 +130,11 @@ class RegisterScreen extends StatelessWidget {
                         // debugPrint(result.toString());
                         Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (_) => HomeScreen()),
+                            MaterialPageRoute(
+                              builder: (_) => HomeScreen(
+                                user: result,
+                              ),
+                            ),
                             (route) => false);
                       }
                     }
@@ -167,8 +170,6 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              
-              
             ],
           ),
         ),
