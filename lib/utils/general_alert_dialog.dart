@@ -1,5 +1,9 @@
-import 'package:flutter/cupertino.dart';
+
+
+
 import 'package:flutter/material.dart';
+import 'package:note_app/models/note_model.dart';
+import 'package:note_app/services/firestore_service.dart';
 
 class GeneralAlertDialog {
   customLoadingDialog(BuildContext context) {
@@ -21,6 +25,39 @@ class GeneralAlertDialog {
                 Text('Loading'),
               ],
             ),
+          );
+        });
+  }
+
+  customAlertDialog(BuildContext context, String message, NoteModel model) {
+    
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: const Text('Please Confirm'),
+            content: Text(message),
+            actions: [
+              TextButton(
+                
+                onPressed: () async{
+                  GeneralAlertDialog().customLoadingDialog(context);
+                  await FirestoreService().deleteNote(model.id!);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  
+                },
+                
+                child: const Text('Yes'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('No'),
+              ),
+            ],
           );
         });
   }

@@ -18,22 +18,24 @@ class EditNoteScreen extends StatelessWidget {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
-  
-
-
   @override
   Widget build(BuildContext context) {
     //retrieve data to show in update page
     titleController.text = note.title!;
     descriptionController.text = note.description!;
     return Scaffold(
-      
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await GeneralAlertDialog().customAlertDialog(
+                context,
+                'Are you sure want to remove the note?',
+                note,
+              );
+            },
             icon: const Icon(
               Icons.delete_outlined,
               color: Colors.red,
@@ -105,28 +107,22 @@ class EditNoteScreen extends StatelessWidget {
                       );
                       Navigator.pop(context);
                     } else {
-                    
                       await FirestoreService().updateNote(
                         note.id!,
                         titleController.text,
                         descriptionController.text,
                       );
 
-                      
-
-                     
-
-                      
                       Navigator.pop(context);
                       Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => HomeScreen(user: user,),
-                      ),
-                    );
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => HomeScreen(
+                            user: user,
+                          ),
+                        ),
+                      );
                     }
-                    
-                    
                   },
                   child: Text('Update Note'),
                   style: ElevatedButton.styleFrom(

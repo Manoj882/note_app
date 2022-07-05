@@ -22,14 +22,22 @@ class FirestoreService{
   }
 
   Future updateNote(String docId, String title, String description) async{
-    
     try{
-      await firestore.collection('notes').doc(docId).update({
+      final updateNote = await firestore.collection('notes').doc(docId).update({
         'title': title,
         'description': description,
       });
+      return updateNote;
+    } catch(e){
+      print(e.toString());
+    }
+  }
 
-     
+  Future deleteNote(String docId) async{
+    try{
+      final deleteNote = await firestore.collection('notes').doc(docId).delete();
+      return deleteNote;
+
     } catch(e){
       print(e.toString());
     }
