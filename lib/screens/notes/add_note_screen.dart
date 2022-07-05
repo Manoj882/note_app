@@ -81,10 +81,17 @@ class AddNoteScreen extends StatelessWidget {
                           ),
                         ),
                       );
-                    } else{
-                      await FirestoreService().addNote(titleController.text, descriptionController.text, user.uid);
+                    } else {
+                      await FirestoreService().addNote(titleController.text,
+                          descriptionController.text, user.uid);
                     }
-                    Navigator.pop(context);  
+                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => HomeScreen(user: user),
+                      ),
+                    );
                   },
                   child: Text('Add Note'),
                   style: ElevatedButton.styleFrom(
