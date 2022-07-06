@@ -45,7 +45,11 @@ class ImageService {
         'path': file.fullPath
       });
     });
-    print(files);
     return files;
+  }
+
+  Future<void> deleteImage(String ref) async{
+    final deleteImage = await firebaseStorage.ref(ref).delete();
+    return deleteImage;
   }
 }
