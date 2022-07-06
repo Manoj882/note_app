@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:note_app/constants/constant.dart';
 import 'package:note_app/services/image_service.dart';
 import 'package:note_app/utils/general_alert_dialog.dart';
+import 'package:provider/provider.dart';
 
 class UploadImageScreen extends StatelessWidget {
   const UploadImageScreen({Key? key}) : super(key: key);
@@ -22,14 +23,34 @@ class UploadImageScreen extends StatelessWidget {
               children: [
                 ElevatedButton.icon(
                   onPressed: () async {
-                    await ImageService().uploadImage('camera');
+                    // await ImageService().uploadImage('camera');
+                    GeneralAlertDialog().customLoadingDialog(context);
+                    await Provider.of<ImageService>(context, listen: false)
+                        .uploadImage('camera');
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Image uploaded successfully!!!'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
                   },
                   icon: Icon(Icons.camera_outlined),
                   label: Text('Camera'),
                 ),
                 ElevatedButton.icon(
                   onPressed: () async {
-                    await ImageService().uploadImage('gallery');
+                    // await ImageService().uploadImage('gallery');
+                    GeneralAlertDialog().customLoadingDialog(context);
+                    await Provider.of<ImageService>(context, listen: false)
+                        .uploadImage('gallery');
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Image uploaded successfully!!!'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
                   },
                   icon: Icon(Icons.photo_outlined),
                   label: Text('Gallery'),
@@ -41,7 +62,8 @@ class UploadImageScreen extends StatelessWidget {
             ),
             Expanded(
               child: FutureBuilder(
-                future: ImageService().loadImages(),
+                future: Provider.of<ImageService>(context, listen: true)
+                    .loadImages(),
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -60,7 +82,6 @@ class UploadImageScreen extends StatelessWidget {
                               child: Card(
                                 child: Container(
                                   height: 200,
-                                  
                                   child: Image.network(
                                     image['url'],
                                     fit: BoxFit.cover,
@@ -72,10 +93,13 @@ class UploadImageScreen extends StatelessWidget {
                               onPressed: () async {
                                 GeneralAlertDialog()
                                     .customLoadingDialog(context);
-                                await ImageService().deleteImage(
+                                await Provider.of<ImageService>(context,
+                                        listen: false)
+                                    .deleteImage(
                                   image['path'],
                                 );
                                 Navigator.pop(context);
+
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(

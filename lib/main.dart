@@ -6,6 +6,8 @@ import 'package:note_app/screens/authentication/register_screen.dart';
 import 'package:note_app/screens/home_screen.dart';
 import 'package:note_app/screens/image_section/upload_image_screen.dart';
 import 'package:note_app/services/auth_service.dart';
+import 'package:note_app/services/image_service.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,24 +22,31 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Note App',
-      theme: ThemeData(
-        // primarySwatch: Colors.blue,
-        brightness: Brightness.dark,
-      ),
-      debugShowCheckedModeBanner: false,
-      // home:  RegisterScreen(),
-      home: StreamBuilder(
-        stream: AuthService().firebaseAuth.authStateChanges(),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            // return HomeScreen(user: snapshot.data);
-            return UploadImageScreen();
-          } else {
-            return LoginScreen();
-          }
-        },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ImageService(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Note App',
+        theme: ThemeData(
+          // primarySwatch: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+        debugShowCheckedModeBanner: false,
+        // home:  RegisterScreen(),
+        home: StreamBuilder(
+          stream: AuthService().firebaseAuth.authStateChanges(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              // return HomeScreen(user: snapshot.data);
+              return UploadImageScreen();
+            } else {
+              return LoginScreen();
+            }
+          },
+        ),
       ),
     );
   }
