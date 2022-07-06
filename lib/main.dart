@@ -4,6 +4,7 @@ import 'package:note_app/screens/authentication/login_screen.dart';
 import 'package:note_app/screens/authentication/register_screen.dart';
 
 import 'package:note_app/screens/home_screen.dart';
+import 'package:note_app/screens/image_section/upload_image_screen.dart';
 import 'package:note_app/services/auth_service.dart';
 
 void main() async {
@@ -31,7 +32,8 @@ class MyApp extends StatelessWidget {
         stream: AuthService().firebaseAuth.authStateChanges(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            return HomeScreen(user: snapshot.data);
+            // return HomeScreen(user: snapshot.data);
+            return UploadImageScreen();
           } else {
             return LoginScreen();
           }

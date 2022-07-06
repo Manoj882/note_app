@@ -6,6 +6,7 @@ import 'package:note_app/models/note_model.dart';
 import 'package:note_app/screens/notes/add_note_screen.dart';
 import 'package:note_app/screens/notes/edit_note_screen.dart';
 import 'package:note_app/services/auth_service.dart';
+import 'package:note_app/utils/general_alert_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({required this.user, Key? key}) : super(key: key);
@@ -30,7 +31,9 @@ class HomeScreen extends StatelessWidget {
         actions: [
           TextButton.icon(
             onPressed: () async {
+              GeneralAlertDialog().customLoadingDialog(context);
               await AuthService().signOut();
+              Navigator.pop(context);
             },
             icon: const Icon(Icons.logout_outlined),
             label: const Text('Logout'),
