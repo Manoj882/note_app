@@ -57,4 +57,27 @@ class ImageService extends ChangeNotifier {
     notifyListeners();
     return deleteImage;
   }
+
+  //Upload mulitiple images
+  Future<void> uploadMultipleImages() async{
+    final picker = ImagePicker();
+    final pickedImages = await picker.pickMultiImage();
+    if(pickedImages == null){
+      return null;
+    } else{
+      await Future.forEach(pickedImages, (XFile image) async{
+        final fileName = image.name;
+        final imageFile = File(image.path);
+        try{
+          await firebaseStorage.ref(fileName).putFile(imageFile);
+          notifyListeners();
+
+        }on FirebaseException catch(e){
+          print(e.toString());
+        } catch(e){
+          print(e.toString());
+        }
+      });
+    }
+  }
 }

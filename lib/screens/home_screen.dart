@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +13,8 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({required this.user, Key? key}) : super(key: key);
 
   final firestore = FirebaseFirestore.instance;
-  
-  final User user;
-  
 
-  
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -46,30 +44,36 @@ class HomeScreen extends StatelessWidget {
       body: Padding(
         padding: basePadding,
         child: StreamBuilder(
-          stream: firestore.collection('notes').where('userId', isEqualTo: user.uid).snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot<Map<String,dynamic>>> snapshot){
-       
-            if(snapshot.hasData){
-              if(snapshot.data!.docs.isNotEmpty){
+          stream: firestore
+              .collection('notes')
+              .where('userId', isEqualTo: user.uid)
+              .snapshots(),
+          builder: (context,
+              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.docs.isNotEmpty) {
                 return ListView.builder(
-                  
                   itemCount: snapshot.data!.docs.length,
-                
-                  itemBuilder: (context, index){
+                  itemBuilder: (context, index) {
                     // final data = snapshot.data!.docs[index].data();
-  
-                    // NoteModel note = NoteModel.fromJson(data);
 
+                    // NoteModel note = NoteModel.fromJson(data);
 
                     final data = snapshot.data!.docs[index].data();
                     final id = snapshot.data!.docs[index].id;
                     final note = NoteModel.fromJson(data, id);
-                   
-                    
+
                     return Card(
                       elevation: 5,
                       color: Colors.teal,
                       child: ListTile(
+                        leading: CachedNetworkImage(
+                          imageUrl: note.image!,
+                          placeholder: (context, url) => Image.asset('assets/images/placeholder.png'),
+                          errorWidget: (context,url,error) => Icon(Icons.error_outlined),
+                          width: 70,
+                          fit: BoxFit.cover,
+                        ),
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 5,
                           horizontal: 10,
@@ -89,40 +93,38 @@ class HomeScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => EditNoteScreen(note: note,user: user,),
+                              builder: (_) => EditNoteScreen(
+                                note: note,
+                                user: user,
+                              ),
                             ),
                           );
-                      
                         },
                       ),
                     );
                   },
-                  
-                  );
-                  
-
-
-
-
-              } else{
+                );
+              } else {
                 return const Center(
                   child: Text('No Notes Available'),
                 );
               }
-             
-
-            } else{
-              return const Center(child: CircularProgressIndicator(),);
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
           },
-          ),
         ),
-        floatingActionButton: FloatingActionButton(
+      ),
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) =>  AddNoteScreen(user: user,),
+              builder: (_) => AddNoteScreen(
+                user: user,
+              ),
             ),
           );
         },
@@ -131,9 +133,6 @@ class HomeScreen extends StatelessWidget {
           Icons.add_outlined,
         ),
       ),
-      );
-      
-    
-    
+    );
   }
 }

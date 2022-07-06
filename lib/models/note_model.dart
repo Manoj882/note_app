@@ -4,6 +4,7 @@ class NoteModel {
   String? id;
   String? title;
   String? description;
+  String? image;
   Timestamp? date;
   String? userId;
 
@@ -11,6 +12,7 @@ class NoteModel {
     this.id,
     required this.title,
     required this.description,
+    required this.image,
     required this.date,
     required this.userId,
   });
@@ -30,6 +32,7 @@ class NoteModel {
     
     title = json['title'];
     description = json['description'];
+    image = json['image'];
     date = json['date'];
     userId = json['userId'];
   }

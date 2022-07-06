@@ -36,8 +36,8 @@ class UploadImageScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  icon: Icon(Icons.camera_outlined),
-                  label: Text('Camera'),
+                  icon: const Icon(Icons.camera_outlined),
+                  label: const Text('Camera'),
                 ),
                 ElevatedButton.icon(
                   onPressed: () async {
@@ -59,7 +59,26 @@ class UploadImageScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(
-              height: 15,
+              height: 30,
+            ),
+            ElevatedButton.icon(
+              onPressed: () async {
+                GeneralAlertDialog().customLoadingDialog(context);
+                await Provider.of<ImageService>(context, listen: false)
+                    .uploadMultipleImages();
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content:
+                        Text('Multiple images are uploaded successfully!!!'),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.photo_album_outlined),
+              label: const Text('Upload Multiples Images'),
+            ),
+            const SizedBox(
+              height: 30,
             ),
             Expanded(
               child: FutureBuilder(

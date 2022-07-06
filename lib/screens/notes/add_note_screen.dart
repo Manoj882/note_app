@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:note_app/constants/constant.dart';
 import 'package:note_app/screens/home_screen.dart';
 import 'package:note_app/screens/notes/edit_note_screen.dart';
@@ -12,6 +16,22 @@ class AddNoteScreen extends StatelessWidget {
 
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+
+  File? imageFile;
+  String? fileName;
+
+  Future<void> uploadImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedImage == null) {
+      return null;
+    } else {
+      fileName = pickedImage.name;
+      imageFile = File(pickedImage.path);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +46,25 @@ class AddNoteScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              InkWell(
+                onTap: ()async{
+                  await uploadImage();
+
+                },
+                child: Container(
+                  height: 150,
+                  child: imageFile == null
+                      ? Center(
+                          child: Icon(
+                            Icons.image_outlined,
+                            size: 100,
+                          ),
+                        )
+                      : Center(
+                          child: Image.file(imageFile!),
+                        ),
+                ),
+              ),
               const Text(
                 'Title',
                 style: TextStyle(
@@ -73,7 +112,7 @@ class AddNoteScreen extends StatelessWidget {
                   onPressed: () async {
                     GeneralAlertDialog().customLoadingDialog(context);
                     if (titleController.text == '' ||
-                        descriptionController.text == '') {
+                        descriptionController.text == '' || imageFile == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
@@ -81,17 +120,24 @@ class AddNoteScreen extends StatelessWidget {
                           ),
                         ),
                       );
+                      Navigator.pop(context);
                     } else {
+                      String imageUrl = await FirebaseStorage.instance.ref(fileName).putFile(imageFile!).then((result) {
+                        return result.ref.getDownloadURL();
+                      });
+
                       await FirestoreService().addNote(titleController.text,
-                          descriptionController.text, user.uid);
-                    }
-                    Navigator.pop(context);
+                          descriptionController.text,imageUrl, user.uid);
+
+                      Navigator.pop(context);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (_) => HomeScreen(user: user),
                       ),
                     );
+                    }
+                    
                   },
                   child: Text('Add Note'),
                   style: ElevatedButton.styleFrom(
