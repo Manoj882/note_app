@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:note_app/constants/constant.dart';
 import 'package:note_app/services/image_service.dart';
@@ -82,8 +83,16 @@ class UploadImageScreen extends StatelessWidget {
                               child: Card(
                                 child: Container(
                                   height: 200,
-                                  child: Image.network(
-                                    image['url'],
+                                  child: CachedNetworkImage(
+                                    imageUrl: image['url'],
+                                    placeholder: (context, url) => Image.asset(
+                                      'assets/images/placeholder.png',
+                                      fit: BoxFit.cover,
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(
+                                      Icons.error_outlined,
+                                    ),
                                     fit: BoxFit.cover,
                                   ),
                                 ),

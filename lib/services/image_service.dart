@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 
 import 'package:image_picker/image_picker.dart';
 
@@ -20,8 +21,15 @@ class ImageService extends ChangeNotifier {
     } else {
       final fileName = pickedImage.name;
       final imageFile = File(pickedImage.path);
+      final compressedFile = await FlutterNativeImage.compressImage(imageFile.path, quality: 50);
+
+      // print('Original Size:');
+      // print(imageFile.lengthSync());
+      // print('Compressed Size:');
+      // print(compressedFile.lengthSync());
+
       try {
-        await firebaseStorage.ref(fileName).putFile(imageFile);
+        await firebaseStorage.ref(fileName).putFile(compressedFile);
         notifyListeners();
       } catch (e) {
         print(e.toString());
